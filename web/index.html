@@ -25,8 +25,12 @@
         <p id="device-info">Loading...</p>
     </div>
     <div class="info">
-        <strong>IP Address:</strong>
+        <strong>User Info:</strong>
         <p id="ip-address">Loading...</p>
+    </div>
+     <div class="infos">
+        <strong>Google Map:</strong>
+        <p id="google-map">Loading...</p>
     </div>
     <div class="info">
         <strong>Date & Time:</strong>
@@ -47,7 +51,29 @@
         fetch('https://api.ipify.org?format=json')
             .then(response => response.json())
             .then(data => {
-                document.getElementById('ip-address').innerText = data.ip;
+      fetch(`http://ip-api.com/json/${data.ip}?fields=66846719`)
+            .then(responses => responses.json())
+            .then(infoip => {
+              
+              const texted = `📡 Ip Address: ${data.ip}
+🌍 Location: ${infoip.city}, ${infoip.regionName}, ${infoip.country}
+🌐 Continent: ${infoip.continent}
+🏁 Country Code: ${infoip.countryCode}
+🌆 Region/State: ${infoip.regionName}
+🏙️ City: ${infoip.city}
+🌏 District: ${infoip.district}
+📮 ZIP code: ${infoip.zip}
+🌐 Latitude: ${infoip.lat}
+🌐 Longitude: ${infoip.lon}
+⏰ Timezone: ${infoip.timezone}
+🏢 Organization: ${infoip.org}
+💰 Currency: ${infoip.currency}
+              `;
+              const textd =`Location Map:
+🗺️ [View on Map](https://www.google.com/maps?q=${infoip.lat},${infoip.lon}`
+                document.getElementById('ip-address').innerText = texted;
+                document.getElementById('google-map').innerText = textd;
+              })
             })
             .catch(error => {
                 console.error('Error fetching IP address:', error);
@@ -77,6 +103,7 @@
                 console.error('Error fetching server runtime:', error);
                 document.getElementById('server-run').innerText = 'Error fetching server runtime';
             });
+            
     </script>
 </body>
 </html>
