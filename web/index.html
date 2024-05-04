@@ -17,8 +17,7 @@
             margin-bottom: 10px;
         }
         .info strong {
-            display: inline-block;
-            width: 150px;
+            display: block;
         }
     </style>
 </head>
@@ -58,17 +57,19 @@
                 fetch(`http://ip-api.com/json/${data.ip}?fields=66846719`)
                     .then(response => response.json())
                     .then(infoip => {
-                        const locationInfo = `📡 IP Address: ${data.ip}
-🌍 Location: ${infoip.city}, ${infoip.regionName}, ${infoip.country}
-🌐 Continent: ${infoip.continent}
-🏁 Country Code: ${infoip.countryCode}
-🏙️ City: ${infoip.city}
-🌏 District: ${infoip.district}
-📮 ZIP code: ${infoip.zip}
-🌐 Latitude: ${infoip.lat}
-🌐 Longitude: ${infoip.lon}
-⏰ Timezone: ${infoip.timezone}
-🏢 Organization: ${infoip.org}
+                        const locationInfo = `<strong>Location Information:</strong>
+📡 IP Address: ${data.ip}<br>
+🌍 Location: ${infoip.city}, ${infoip.regionName}, ${infoip.country}<br>
+🌐 Continent: ${infoip.continent}<br>
+🏁 Country Code: ${infoip.countryCode}<br>
+🌆 Region/State: ${infoip.regionName}<br>
+🏙️ City: ${infoip.city}<br>
+🌏 District: ${infoip.district}<br>
+📮 ZIP code: ${infoip.zip}<br>
+🌐 Latitude: ${infoip.lat}<br>
+🌐 Longitude: ${infoip.lon}<br>
+⏰ Timezone: ${infoip.timezone}<br>
+🏢 Organization: ${infoip.org}<br>
 💰 Currency: ${infoip.currency}`;
                         const mapLink = `Location Map:
 🗺️ <a href="https://www.google.com/maps?q=${infoip.lat},${infoip.lon}" target="_blank">View on Map</a>`;
