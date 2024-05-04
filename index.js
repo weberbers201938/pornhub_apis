@@ -44,31 +44,32 @@ app.get('/cronhub', async (req, res) => {
   }
 });
 
-app.get('/api/video', (req, res) => {
-    // Extract viewkey using regex
-    const url = req.query.video;
-    const regex = /viewkey=([a-zA-Z0-9_-]+)/;
-    const match = url.match(regex);
-    const viewkey = match ? match[1] : null;
+app.get('/cronhub/download', async (req, res) => {
+    const url = req.query.url; // Kunin ang URL mula sa query parameters
+    
+    try {
+        const headers = {
+            'Accept': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+            'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36',
+            'Referer': 'https://www.download4.cc/pornhub-video-downloader.html'
+        };
 
-    if (!viewkey) {
-        return res.status(400).json({ error: 'Invalid video URL' });
+        const response = await axios.get(`https://www.download4.cc/media/parse?address=${url}`, {
+            headers: headers
+        });
+
+        const link1 = response.data.data.formats[0].url;
+        const link2 = response.data.data.formats[4].url;
+        const link3 = response.data.data.formats[7].url;
+        const title = response.data.data.title;
+        const photo = response.data.data.thumbnail;     
+        
+        res.json({ Title: title, Photo: photo, Url: { 240: link1, 480: link2, 720: link3 } });
+        
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
-
-    // Simulate processing
-    // In a real scenario, you'd probably fetch data or perform some logic here
-    const responseData = {
-        author: "Berwin",
-        key: viewkey,
-        host: "pornhub.com",
-        url: `https://www.pornhub.com/embed/${viewkey}`,
-        video: `https://www.pornhub.com/view_video.php?viewkey=${viewkey}`
-    };
-
-    // Simulate delay (optional)
-    setTimeout(() => {
-        res.status(200).json(responseData);
-    }, 2000); // 2 seconds delay
 });
 
 app.listen(PORT, () => {
