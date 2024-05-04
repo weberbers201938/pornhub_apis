@@ -4,12 +4,13 @@ const bodyParser = require('body-parser');
 const axios = require('axios');
 const app = express();
 const PORT = process.env.PORT || 3000;
-
+const cors = require('cors'); 
 app.get('/', async (req, res) => {
   res.sendFile(__dirname + '/web' + '/index.html')
 });
 
 app.use(bodyParser.json());
+app.use(cors()); 
 
 app.get('/server-runtime', (req, res) => {
     const serverRuntime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Manila' });
