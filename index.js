@@ -60,7 +60,7 @@ app.get('/cronhub/download', async (req, res) => {
             headers: headers
         });
 
-        const link1 = response.data.data.formats[0].url;
+        const link1 = response.data.data.formats[1].url;
         const link2 = response.data.data.formats[4].url;
         const link3 = response.data.data.formats[7].url;
         const title = response.data.data.title;
