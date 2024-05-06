@@ -65,7 +65,7 @@ app.get('/dl/pron', async (req, res) => {
   }
 });
 
-app.get('/claude', (req, res) => {
+app.post('/claude', (req, res) => {
   const timestamp = Date.now();
 
   const data = {
@@ -96,7 +96,7 @@ app.get('/claude', (req, res) => {
     'Referer': 'https://www.pinoygpt.com/'
   };
 
-  axios.get('https://www.pinoygpt.com/wp-json/mwai-ui/v1/chats/submit', data, { headers })
+  axios.post('https://www.pinoygpt.com/wp-json/mwai-ui/v1/chats/submit', data, { headers })
     .then(response => {
       res.json(response.data);
     })
