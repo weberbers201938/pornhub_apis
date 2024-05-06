@@ -58,7 +58,7 @@ app.get('/dl/pron', async (req, res) => {
     const data = `url=${encodeURIComponent(req.query.url)}`;
 
     const response = await axios.post(url, data, { headers });
-    res.json(response.data);
+    res.json((JSON.strigify(response.data));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'An error occurred while processing the request.' });
@@ -67,7 +67,7 @@ app.get('/dl/pron', async (req, res) => {
 
 app.post('/claude', (req, res) => {
   const timestamp = Date.now();
-
+const prompt = req.query.prompt;
   const data = {
     botId: "default",
     customId: "cb8524911960c2a53d904eee296da6bb",
@@ -78,12 +78,12 @@ app.post('/claude', (req, res) => {
       {
         id: "1x0pl5i8ylx",
         role: "assistant",
-        content: null,
+        content: "Hi! How can I help you?",
         who: "AI: ",
         timestamp: timestamp // I-set ang timestamp dito
       }
     ],
-    newMessage: req.query.prompt,
+    newMessage: prompt,
     newFileId: null,
     stream: true
   };
@@ -98,7 +98,7 @@ app.post('/claude', (req, res) => {
 
   axios.post('https://www.pinoygpt.com/wp-json/mwai-ui/v1/chats/submit', data, { headers })
     .then(response => {
-      res.json(response.data);
+      res.json((JSON.stringify(response.data));
     })
     .catch(error => {
       // Kung may error, isasauli ito bilang JSON response kasama ang error message
