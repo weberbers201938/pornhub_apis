@@ -66,8 +66,9 @@ app.get('/dl/pron', async (req, res) => {
 });
 
 app.post('/claude', (req, res) => {
-  const timestamp = Date.now();
-const prompt = req.query.prompt;
+  
+  const prompt = req.query.prompt;
+
   const data = {
     botId: "default",
     customId: "cb8524911960c2a53d904eee296da6bb",
@@ -98,13 +99,26 @@ const prompt = req.query.prompt;
 
   axios.post('https://www.pinoygpt.com/wp-json/mwai-ui/v1/chats/submit', data, { headers })
     .then(response => {
-      res.json(JSON.stringify(response.data, null, 2));
+      // Kunin ang reply data mula sa response ng PinoyGPT API
+      let replyData = null;
+      const messages = response.data.split('\n\n').filter(message => message.startsWith('data:'));
+
+      messages.forEach(message => {
+        const jsonData = JSON.parse(message.slice(6));
+        if (jsonData.type === 'end') {
+          replyData = JSON.parse(jsonData.data);
+        }
+      });
+
+      // Isauli ang reply data sa endpoint
+      res.json(replyData);
     })
     .catch(error => {
       // Kung may error, isasauli ito bilang JSON response kasama ang error message
       res.status(500).json({ error: error.message });
     });
 });
+
 
         
 app.listen(PORT, () => {
