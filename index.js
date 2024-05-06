@@ -58,7 +58,7 @@ app.get('/dl/pron', async (req, res) => {
     const data = `url=${encodeURIComponent(req.query.url)}`;
 
     const response = await axios.post(url, data, { headers });
-    res.json((JSON.strigify(response.data));
+    res.json((JSON.strigify(response.data, null, 2));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'An error occurred while processing the request.' });
@@ -80,7 +80,7 @@ const prompt = req.query.prompt;
         role: "assistant",
         content: "Hi! How can I help you?",
         who: "AI: ",
-        timestamp: timestamp // I-set ang timestamp dito
+        timestamp: 1715033883608
       }
     ],
     newMessage: prompt,
@@ -98,7 +98,7 @@ const prompt = req.query.prompt;
 
   axios.post('https://www.pinoygpt.com/wp-json/mwai-ui/v1/chats/submit', data, { headers })
     .then(response => {
-      res.json((JSON.stringify(response.data));
+      res.json((JSON.stringify(response.data, null, 2));
     })
     .catch(error => {
       // Kung may error, isasauli ito bilang JSON response kasama ang error message
