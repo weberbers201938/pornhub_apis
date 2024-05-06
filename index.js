@@ -46,32 +46,23 @@ app.get('/cronhub', async (req, res) => {
   }
 });
 
-app.get('/cronhub/download', async (req, res) => {
-    const url = req.query.url; // Kunin ang URL mula sa query parameters
-    
-    try {
-        const headers = {
-            'Accept': 'application/x-www-form-urlencoded',
-            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-            'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36',
-            'Referer': 'https://www.download4.cc/pornhub-video-downloader.html'
-        };
+app.get('/dl/pron', async (req, res) => {
+  try {
+    const url = 'https://api3.p2mate.com/mates/en/analyze/ajax';
+    const headers = {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      'Accept': '*/*',
+      'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36',
+      'Referer': req.headers['referer']
+    };
+    const data = `url=${encodeURIComponent(req.query.url)}`;
 
-        const response = await axios.get(`https://www.download4.cc/media/parse?address=${url}`, {
-            headers: headers
-        });
-
-        const link1 = response.data.data.formats[1].url;
-        const link2 = response.data.data.formats[4].url;
-        const link3 = response.data.data.formats[7].url;
-        const title = response.data.data.title;
-        const photo = response.data.data.thumbnail;     
-        
-        res.json({ Title: title, Photo: photo, Url: { 240: link1, 480: link2, 720: link3 } });
-        
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+    const response = await axios.post(url, data, { headers });
+    res.json(response.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while processing the request.' });
+  }
 });
 
 app.listen(PORT, () => {
