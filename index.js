@@ -65,6 +65,48 @@ app.get('/dl/pron', async (req, res) => {
   }
 });
 
+app.get('/claude', (req, res) => {
+  const timestamp = Date.now();
+
+  const data = {
+    botId: "default",
+    customId: "cb8524911960c2a53d904eee296da6bb",
+    session: "N/A",
+    chatId: "pvdlhpwm6bq",
+    contextId: 12,
+    messages: [
+      {
+        id: "1x0pl5i8ylx",
+        role: "assistant",
+        content: null,
+        who: "AI: ",
+        timestamp: timestamp // I-set ang timestamp dito
+      }
+    ],
+    newMessage: req.query.prompt,
+    newFileId: null,
+    stream: true
+  };
+
+  const headers = {
+    'Content-Type': 'application/json',
+    'X-WP-Nonce': '16b638fde7',
+    'Accept': 'text/event-stream',
+    'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36',
+    'Referer': 'https://www.pinoygpt.com/'
+  };
+
+  axios.get('https://www.pinoygpt.com/wp-json/mwai-ui/v1/chats/submit', data, { headers })
+    .then(response => {
+      res.json(response.data);
+    })
+    .catch(error => {
+      // Kung may error, isasauli ito bilang JSON response kasama ang error message
+      res.status(500).json({ error: error.message });
+    });
+});
+
+        
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
 });
