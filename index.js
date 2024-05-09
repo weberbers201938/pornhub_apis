@@ -135,12 +135,43 @@ app.post('/api/react', async (req, res) => {
                 'Cookie': cookie
             }
         });
+
+        // Save history entry
+        const historyEntry = { link, type };
+        saveHistory(historyEntry);
+
         res.json(response.data.message);
     } catch (error) {
         console.error(error);
         res.json({ error: 'an error occurred' });
     }
 });
+
+// API endpoint para sa pag-load ng history
+app.get('/api/history', (req, res) => {
+    try {
+        const history = loadHistory();
+        res.json(history);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while fetching history.' });
+    }
+});
+
+// Helper function para sa pag-save sa history
+function saveHistory(entry) {
+    fs.appendFile('react_history.json', JSON.stringify(entry) + '\n', (err) => {
+        if (err) console.error(err);
+        console.log('History entry saved successfully!');
+    });
+}
+
+// Helper function para sa pag-load ng history
+function loadHistory() {
+    const rawData = fs.readFileSync('react_history.json');
+    const history = rawData.toString().split('\n').filter(entry => entry !== '').map(JSON.parse);
+    return history;
+}
         
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
