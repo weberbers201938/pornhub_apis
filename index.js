@@ -135,7 +135,7 @@ app.post('/api/react', async (req, res) => {
                 'Cookie': cookie
             }
         });
-        res.json(response.data);
+        res.json(response.data.message);
     } catch (error) {
         console.error(error);
         res.json({ error: 'an error occurred' });
