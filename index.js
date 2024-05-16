@@ -7,7 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const cors = require('cors'); 
 app.get('/', async (req, res) => {
-  res.sendFile(__dirname + '/web' + '/index.html')
+  res.sendFile(__dirname + '/index.html')
 });
 
 app.use(bodyParser.json());
